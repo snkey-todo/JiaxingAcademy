@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FragmentLifeCycle</string>
+    <string name="fragment_text">This is a Fragment.</string>
+</resources>
