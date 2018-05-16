@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GreenDaoSample</string>
+    <string name="add">增</string>
+    <string name="delete">删</string>
+    <string name="update">改</string>
+    <string name="query">查</string>
+</resources>
