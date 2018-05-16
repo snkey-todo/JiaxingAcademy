@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Retrofit post请求
+     */
     private void getGoods() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.37.59.239:8080/MobileShop/")
@@ -74,14 +77,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, RxJavaActivity.class));
     }
 
+    /**
+     * Retrofit get请求
+     */
     private void getGoodsDetail() {
+        /**
+         * 第一步：
+         */
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.37.59.239:8080/MobileShop/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
+        /**
+         *
+         */
         GoodsService service = retrofit.create(GoodsService.class);
-
+        /**
+         *
+         */
         Call<HttpResult<GoodsEntity>> call = service.getGoodsDetail(89);
         call.enqueue(new Callback<HttpResult<GoodsEntity>>() {
             @Override

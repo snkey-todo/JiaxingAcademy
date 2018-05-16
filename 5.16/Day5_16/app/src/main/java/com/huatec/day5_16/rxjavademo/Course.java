@@ -1,4 +1,4 @@
-package com.huatec.day5_16.model;
+package com.huatec.day5_16.rxjavademo;
 
 /**
  * Created by think on 2018/5/16.

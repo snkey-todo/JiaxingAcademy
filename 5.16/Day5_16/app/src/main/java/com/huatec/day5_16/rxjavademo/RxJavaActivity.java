@@ -9,20 +9,15 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.huatec.day5_16.R;
-import com.huatec.day5_16.model.Course;
-import com.huatec.day5_16.model.Student;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class RxJavaActivity extends AppCompatActivity {
 
@@ -51,7 +46,11 @@ public class RxJavaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 处理一对多
+     */
     private void doFlatMap() {
+        //模拟数据
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             Student student = new Student();
@@ -82,15 +81,22 @@ public class RxJavaActivity extends AppCompatActivity {
                 Log.d(tag, course.getName());
             }
         };
+        /**
+         * 订阅
+         */
         Observable.from(students)
                 .flatMap(new Func1<Student, Observable<Course>>() {
                     @Override
                     public Observable<Course> call(Student student) {
+                        Log.d(tag,student.getName());
                         return Observable.from(student.getCourses());
                     }
                 }).subscribe(subscriber);
     }
 
+    /**
+     * 处理一对一
+     */
     private void doMap() {
         Observable.just("/res/drawable/hello.png")
                 .map(new Func1<String, Bitmap>() {
@@ -106,7 +112,13 @@ public class RxJavaActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 创建观察者、被观察者、订阅的方式
+     */
     private void doRxJava() {
+        /**
+         * 方式1：创建观察者
+         */
         Observer<String> observer = new Observer<String>() {
             @Override
             public void onCompleted() {
@@ -125,7 +137,9 @@ public class RxJavaActivity extends AppCompatActivity {
 
             }
         };
-
+        /**
+         * 方式2：创建观察者
+         */
 //        Subscriber<String> subscriber = new Subscriber<String>() {
 //            @Override
 //            public void onCompleted() {
@@ -142,26 +156,40 @@ public class RxJavaActivity extends AppCompatActivity {
 //                Log.d(tag, "item:" + s);
 //            }
 //        };
-
+        /**
+         * 方式1：创建被观察者
+         */
         Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 subscriber.onNext("hello1");
                 subscriber.onNext("hello2");
                 subscriber.onNext("hello3");
-                subscriber.onCompleted();
-//                subscriber.onError(new RuntimeException("出现错误啦"));
+                subscriber.onCompleted();   //成功
+//                subscriber.onError(new RuntimeException("出现错误啦"));//失败
             }
         });
+        /**
+         * 方式2：使用just创建被观察者
+         */
         // just方式
 //        Observable observable1 = Observable.just("hello1","hello2","hello3");
 
+        /**
+         * 方式3：使用from创建被观察者
+         */
         // from方式
 //        String[] words = {"hello1","hello2","hello3"};
 //        Observable observable1 = Observable.from(words);
 
-        observable.subscribe(observer);
 
+        /**
+         * 订阅方式1
+         */
+        observable.subscribe(observer);
+        /**
+         * 订阅方式2
+         */
         // 线程控制的示例代码
 //        observable.subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
