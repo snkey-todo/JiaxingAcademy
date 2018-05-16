@@ -7,6 +7,7 @@ package com.huatec.day5_16.model;
 public class HttpResult<T> {
     private int status;
     private String msg;
+    private T data;
 
     @Override
     public String toString() {
@@ -41,5 +42,5 @@ public class HttpResult<T> {
         this.data = data;
     }
 
-    private T data;
+
 }

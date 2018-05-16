@@ -64,6 +64,7 @@ public class RxJavaActivity extends AppCompatActivity {
             students.add(student);
         }
 
+
         Subscriber<Course> subscriber = new Subscriber<Course>() {
             @Override
             public void onCompleted() {
@@ -73,7 +74,6 @@ public class RxJavaActivity extends AppCompatActivity {
             @Override
             public void onError(Throwable e) {
                 Log.d(tag, "onError");
-
             }
 
             @Override
@@ -91,7 +91,8 @@ public class RxJavaActivity extends AppCompatActivity {
                         Log.d(tag,student.getName());
                         return Observable.from(student.getCourses());
                     }
-                }).subscribe(subscriber);
+                })
+                .subscribe(subscriber);
     }
 
     /**
@@ -136,6 +137,7 @@ public class RxJavaActivity extends AppCompatActivity {
                 Log.d(tag, "item:" + s);
 
             }
+
         };
         /**
          * 方式2：创建观察者
@@ -162,11 +164,12 @@ public class RxJavaActivity extends AppCompatActivity {
         Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
+                subscriber.onStart();
                 subscriber.onNext("hello1");
                 subscriber.onNext("hello2");
                 subscriber.onNext("hello3");
                 subscriber.onCompleted();   //成功
-//                subscriber.onError(new RuntimeException("出现错误啦"));//失败
+//               subscriber.onError(new RuntimeException("出现错误啦"));//失败
             }
         });
         /**

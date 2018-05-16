@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvResult;
-    private String tag = getClass().getSimpleName();
+    private String tag = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<HttpResult<List<GoodsEntity>>>() {
             @Override
             public void onResponse(Call<HttpResult<List<GoodsEntity>>> call, Response<HttpResult<List<GoodsEntity>>> response) {
+                HttpResult<List<GoodsEntity>> httpResult =  response.body();
+
+                List<GoodsEntity> list = httpResult.getData();
+
+
                 Log.d(tag,response.body().getData().toString());
                 tvResult.setText(response.body().getData().toString());
             }
@@ -82,24 +87,34 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getGoodsDetail() {
         /**
-         * 第一步：
+         * 第一步：创建Retrofit对象
          */
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.37.59.239:8080/MobileShop/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         /**
-         *
+         *第二步：获取Service对象
          */
         GoodsService service = retrofit.create(GoodsService.class);
         /**
-         *
+         *第三步：执行网络请求
          */
         Call<HttpResult<GoodsEntity>> call = service.getGoodsDetail(89);
         call.enqueue(new Callback<HttpResult<GoodsEntity>>() {
             @Override
             public void onResponse(Call<HttpResult<GoodsEntity>> call, Response<HttpResult<GoodsEntity>> response) {
-                Log.d(tag,response.body().getData().toString());
+
+                HttpResult<GoodsEntity> httpResult = response.body();
+
+                int status = httpResult.getStatus();
+                String msg = httpResult.getMsg();
+                GoodsEntity goodsEntity = httpResult.getData();
+
+                Log.d(tag,"status:" + status);
+                Log.d(tag,"msg:" + msg);
+                Log.d(tag,goodsEntity.toString());
+
                 tvResult.setText(response.body().getData().toString());
             }
 
@@ -108,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 

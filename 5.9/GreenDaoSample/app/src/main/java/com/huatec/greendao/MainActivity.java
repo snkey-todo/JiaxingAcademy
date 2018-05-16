@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
      * 删除操作
      * @param view
      */
+
     public void delete(View view){
         final EditText editText = new EditText(MainActivity.this);
         AlertDialog.Builder inputDialog =
